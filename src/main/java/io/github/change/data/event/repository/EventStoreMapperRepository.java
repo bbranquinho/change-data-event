@@ -1,4 +1,4 @@
-package io.github.bbranquinho.repository;
+package io.github.change.data.event.repository;
 
 public interface EventStoreMapperRepository {
 }

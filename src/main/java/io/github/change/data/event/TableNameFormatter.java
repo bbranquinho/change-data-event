@@ -1,4 +1,4 @@
-package io.github.bbranquinho;
+package io.github.change.data.event;
 
 public interface TableNameFormatter {
 

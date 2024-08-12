@@ -1,13 +1,11 @@
-package io.github.bbranquinho.idempotency;
+package io.github.change.data.event.idempotency;
 
-import io.github.bbranquinho.dto.DynamoEvent;
+import io.github.change.data.event.dynamo.DynamoEvent;
 import org.jboss.logging.Logger;
 import software.amazon.awssdk.enhanced.dynamodb.DynamoDbTable;
 import software.amazon.awssdk.enhanced.dynamodb.Key;
 import software.amazon.awssdk.enhanced.dynamodb.model.QueryConditional;
 import software.amazon.awssdk.enhanced.dynamodb.model.QueryEnhancedRequest;
-
-import static io.github.bbranquinho.dto.DynamoEvent.IDEMPOTENCE_INDEX_NAME;
 
 public class GSIIdempotencyStrategy implements IdempotencyStrategy {
 
@@ -30,7 +28,7 @@ public class GSIIdempotencyStrategy implements IdempotencyStrategy {
                                                                 .limit(GSI_TOKEN_LIMIT)
                                                                 .build();
 
-        return eventStoreDynamoDbTable.index(IDEMPOTENCE_INDEX_NAME)
+        return eventStoreDynamoDbTable.index(DynamoEvent.IDEMPOTENCE_INDEX_NAME)
                                       .query(queryRequest)
                                       .stream()
                                       .limit(1)

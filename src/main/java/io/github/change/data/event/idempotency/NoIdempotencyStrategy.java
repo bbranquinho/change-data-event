@@ -1,6 +1,6 @@
-package io.github.bbranquinho.idempotency;
+package io.github.change.data.event.idempotency;
 
-import io.github.bbranquinho.dto.DynamoEvent;
+import io.github.change.data.event.dynamo.DynamoEvent;
 import org.jboss.logging.Logger;
 import software.amazon.awssdk.enhanced.dynamodb.DynamoDbTable;
 

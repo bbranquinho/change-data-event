@@ -1,4 +1,4 @@
-package io.github.bbranquinho.dto;
+package io.github.change.data.event.dynamo;
 
 import java.util.Optional;
 

@@ -1,6 +1,4 @@
-package io.github.bbranquinho;
-
-import java.util.Optional;
+package io.github.change.data.event;
 
 public interface Event {
 

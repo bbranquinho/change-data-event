@@ -1,11 +1,11 @@
-package io.github.bbranquinho.repository;
+package io.github.change.data.event.repository;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import io.github.bbranquinho.Aggregate;
-import io.github.bbranquinho.ChangeDataEventConfig;
-import io.github.bbranquinho.dto.AggregateEntity;
-import io.github.bbranquinho.dto.DynamoEvent;
-import io.github.bbranquinho.idempotency.IdempotencyStrategy;
+import io.github.change.data.event.Aggregate;
+import io.github.change.data.event.ChangeDataEventConfig;
+import io.github.change.data.event.dynamo.AggregateEntity;
+import io.github.change.data.event.dynamo.DynamoEvent;
+import io.github.change.data.event.idempotency.IdempotencyStrategy;
 import org.jboss.logging.Logger;
 import software.amazon.awssdk.enhanced.dynamodb.DynamoDbEnhancedClient;
 import software.amazon.awssdk.enhanced.dynamodb.model.TransactWriteItemsEnhancedRequest;

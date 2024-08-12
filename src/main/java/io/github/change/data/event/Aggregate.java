@@ -1,4 +1,4 @@
-package io.github.bbranquinho;
+package io.github.change.data.event;
 
 import java.util.List;
 import java.util.Optional;
