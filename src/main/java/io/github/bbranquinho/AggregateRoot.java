@@ -26,6 +26,7 @@ public abstract class AggregateRoot implements Aggregate {
         eventCreated(Arrays.asList(events));
     }
 
+    @SuppressWarnings("unchecked")
     @Override
     public <T extends Aggregate> T applyEvents() {
         Aggregate aggregate = this;

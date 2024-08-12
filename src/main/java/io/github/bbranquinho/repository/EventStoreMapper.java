@@ -9,7 +9,7 @@ import java.util.Optional;
 
 public interface EventStoreMapper<A extends Aggregate, E extends AggregateEntity> extends EventStoreMapperRepository {
 
-    String domainName();
+    String aggregateName();
 
     DynamoDbTable<E> getDynamoDbTable();
 

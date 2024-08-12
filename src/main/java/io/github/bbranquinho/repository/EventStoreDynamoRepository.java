@@ -1,11 +1,12 @@
 package io.github.bbranquinho.repository;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import io.github.bbranquinho.Aggregate;
 import io.github.bbranquinho.ChangeDataEventConfig;
 import io.github.bbranquinho.dto.AggregateEntity;
 import io.github.bbranquinho.dto.DynamoEvent;
 import io.github.bbranquinho.idempotency.IdempotencyStrategy;
-import com.fasterxml.jackson.databind.ObjectMapper;
+import org.jboss.logging.Logger;
 import software.amazon.awssdk.enhanced.dynamodb.DynamoDbEnhancedClient;
 import software.amazon.awssdk.enhanced.dynamodb.model.TransactWriteItemsEnhancedRequest;
 import software.amazon.awssdk.services.dynamodb.model.IdempotentParameterMismatchException;
@@ -18,11 +19,11 @@ import java.util.Optional;
 
 public class EventStoreDynamoRepository implements EventStoreRepository {
 
-    //private static final Logger LOGGER = Logger.getLogger(EventStoreDynamoRepository.class);
+    private static final Logger LOGGER = Logger.getLogger(EventStoreDynamoRepository.class);
 
     private static final String DEFAULT_EVENT_STORE_DELIMITER = "#";
 
-    private final Map<String, EventStoreMapper> eventStoreMapperByDomainName = new HashMap<>();
+    private final Map<String, EventStoreMapper> eventStoreMapperByAggregateName = new HashMap<>();
 
     private final ObjectMapper objectMapper;
 
@@ -52,7 +53,7 @@ public class EventStoreDynamoRepository implements EventStoreRepository {
         token.ifPresent(requestBuilder::clientRequestToken);
 
         aggregates.forEach(aggregate -> {
-            EventStoreMapper eventStoreMapper = eventStoreMapperByDomainName.get(aggregate.domainName());
+            EventStoreMapper eventStoreMapper = eventStoreMapperByAggregateName.get(aggregate.aggregateName());
 
             if (eventStoreMapper == null) {
                 throw new IllegalStateException(String.format("There is no mapper registered for the %s.", aggregate.getClass()));
@@ -66,15 +67,18 @@ public class EventStoreDynamoRepository implements EventStoreRepository {
             }
 
             AggregateEntity aggregateEntity = eventStoreMapper.fromDomain(aggregate);
+
             requestBuilder.addPutItem(eventStoreMapper.getDynamoDbTable(), aggregateEntity);
 
             String id = String.format("%s%s%s", eventStoreMapper.eventStorePrefix().orElse(""),
-                                   aggregateEntity.aggregatePk(),
-                                   aggregateEntity.aggregateSk().map(s -> getEventStoreDelimiter() + s).orElse("")
+                                      aggregateEntity.aggregatePk(),
+                                      aggregateEntity.aggregateSk().map(s -> getEventStoreDelimiter() + s).orElse("")
             );
 
-            DynamoEvent event = DynamoEvent.fromDomain(objectMapper, token, aggregate, id, datetime, ttl);
-            requestBuilder.addPutItem(eventStoreMapper.getEventStoreDynamoDbTable(), event);
+            if (this.changeDataEventConfig.enableEventStore()) {
+                DynamoEvent event = DynamoEvent.fromDomain(objectMapper, token, aggregate, id, datetime, ttl);
+                requestBuilder.addPutItem(eventStoreMapper.getEventStoreDynamoDbTable(), event);
+            }
         });
 
         dynamoDbEnhancedClient.transactWriteItems(requestBuilder.build());
@@ -90,13 +94,13 @@ public class EventStoreDynamoRepository implements EventStoreRepository {
 
     @Override
     public <A extends Aggregate, E extends AggregateEntity> void registerMapper(EventStoreMapper<A, E> dynamoDbMapper) {
-        //LOGGER.warnf("Registering mapper for domain %s and class %s.", dynamoDbMapper.domainName(), dynamoDbMapper.getClass());
+        LOGGER.infof("Registering mapper for domain %s and class %s.", dynamoDbMapper.aggregateName(), dynamoDbMapper.getClass());
 
-        if (this.eventStoreMapperByDomainName.containsKey(dynamoDbMapper.domainName())) {
-            throw new IllegalStateException(String.format("Domain %s already registered.", dynamoDbMapper.domainName()));
+        if (this.eventStoreMapperByAggregateName.containsKey(dynamoDbMapper.aggregateName())) {
+            throw new IllegalStateException(String.format("Domain %s already registered.", dynamoDbMapper.aggregateName()));
         }
 
-        this.eventStoreMapperByDomainName.put(dynamoDbMapper.domainName(), dynamoDbMapper);
+        this.eventStoreMapperByAggregateName.put(dynamoDbMapper.aggregateName(), dynamoDbMapper);
     }
 
 }

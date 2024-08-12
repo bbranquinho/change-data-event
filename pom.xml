@@ -28,6 +28,7 @@
         <java.version>11</java.version>
         <java.source.version>11</java.source.version>
         <dynamodb.version>2.26.7</dynamodb.version>
+        <jboss.logmanager.version>3.6.0.Final</jboss.logmanager.version>
     </properties>
 
     <dependencies>
@@ -35,6 +36,12 @@
             <groupId>software.amazon.awssdk</groupId>
             <artifactId>dynamodb-enhanced</artifactId>
             <version>${dynamodb.version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>org.jboss.logging</groupId>
+            <artifactId>jboss-logging</artifactId>
+            <version>${jboss.logmanager.version}</version>
         </dependency>
 
         <dependency>

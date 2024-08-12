@@ -5,31 +5,31 @@ import software.amazon.awssdk.enhanced.dynamodb.mapper.annotations.DynamoDbBean;
 @DynamoDbBean
 public class DynamoEventData {
 
-    private String eventType;
+    private String type;
 
-    private String eventData;
+    private String data;
 
     public DynamoEventData() {
     }
 
-    public DynamoEventData(String eventType, String eventData) {
-        this.eventType = eventType;
-        this.eventData = eventData;
+    public DynamoEventData(String type, String data) {
+        this.type = type;
+        this.data = data;
     }
 
-    public String getEventType() {
-        return eventType;
+    public String getType() {
+        return type;
     }
 
-    public void setEventType(String eventType) {
-        this.eventType = eventType;
+    public void setType(String type) {
+        this.type = type;
     }
 
-    public String getEventData() {
-        return eventData;
+    public String getData() {
+        return data;
     }
 
-    public void setEventData(String eventData) {
-        this.eventData = eventData;
+    public void setData(String data) {
+        this.data = data;
     }
 }

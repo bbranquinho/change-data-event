@@ -4,7 +4,7 @@ import java.util.List;
 import java.util.Optional;
 
 public interface Aggregate {
-    String domainName();
+    String aggregateName();
 
     Optional<Long> getVersion();
 

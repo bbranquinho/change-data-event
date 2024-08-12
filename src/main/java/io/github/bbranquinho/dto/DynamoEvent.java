@@ -1,9 +1,10 @@
 package io.github.bbranquinho.dto;
 
-import io.github.bbranquinho.Aggregate;
-import io.github.bbranquinho.Event;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import io.github.bbranquinho.Aggregate;
+import io.github.bbranquinho.Event;
+import org.jboss.logging.Logger;
 import software.amazon.awssdk.enhanced.dynamodb.mapper.annotations.DynamoDbBean;
 import software.amazon.awssdk.enhanced.dynamodb.mapper.annotations.DynamoDbPartitionKey;
 import software.amazon.awssdk.enhanced.dynamodb.mapper.annotations.DynamoDbSecondaryPartitionKey;
@@ -16,7 +17,7 @@ import java.util.stream.Collectors;
 @DynamoDbBean
 public class DynamoEvent {
 
-//    private static final Logger LOGGER = Logger.getLogger(DynamoEvent.class);
+    private static final Logger LOGGER = Logger.getLogger(DynamoEvent.class);
 
     public static final String IDEMPOTENCE_INDEX_NAME = "gsiIdempotence";
 
@@ -61,7 +62,7 @@ public class DynamoEvent {
                                                    .stream()
                                                    .map(e -> fromDomain(objectMapper, e))
                                                    .flatMap(Optional::stream)
-                .collect(Collectors.toList());
+                                                   .collect(Collectors.toList());
 
         return new DynamoEvent(
                 id,
@@ -75,9 +76,11 @@ public class DynamoEvent {
 
     private static Optional<DynamoEventData> fromDomain(ObjectMapper objectMapper, Event event) {
         try {
-            return Optional.of(new DynamoEventData(event.getClass().getName(), objectMapper.writeValueAsString(event)));
+            String type = Optional.ofNullable(event.typeTransformer()).orElse(event.getClass().getName());
+            String data = Optional.ofNullable(event.dataTransformer()).orElse(objectMapper.writeValueAsString(event));
+            return Optional.of(new DynamoEventData(type, data));
         } catch (JsonProcessingException e) {
-//            LOGGER.error(String.format("Error to parse object [%s].", e), e);
+            LOGGER.error(String.format("Error to parse object [%s].", e.getMessage()), e);
             return Optional.empty();
         }
     }
