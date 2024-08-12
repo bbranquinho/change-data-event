@@ -1,4 +1,4 @@
-package io.github.change.data.event;
+package io.bbranquinho.change.data.event;
 
 public interface Event {
 

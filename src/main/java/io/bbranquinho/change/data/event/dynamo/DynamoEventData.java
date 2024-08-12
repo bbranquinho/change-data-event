@@ -1,4 +1,4 @@
-package io.github.change.data.event.dynamo;
+package io.bbranquinho.change.data.event.dynamo;
 
 import software.amazon.awssdk.enhanced.dynamodb.mapper.annotations.DynamoDbBean;
 

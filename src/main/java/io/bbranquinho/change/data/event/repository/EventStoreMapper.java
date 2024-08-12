@@ -1,8 +1,8 @@
-package io.github.change.data.event.repository;
+package io.bbranquinho.change.data.event.repository;
 
-import io.github.change.data.event.Aggregate;
-import io.github.change.data.event.dynamo.AggregateEntity;
-import io.github.change.data.event.dynamo.DynamoEvent;
+import io.bbranquinho.change.data.event.dynamo.AggregateEntity;
+import io.bbranquinho.change.data.event.Aggregate;
+import io.bbranquinho.change.data.event.dynamo.DynamoEvent;
 import software.amazon.awssdk.enhanced.dynamodb.DynamoDbTable;
 
 import java.util.Optional;

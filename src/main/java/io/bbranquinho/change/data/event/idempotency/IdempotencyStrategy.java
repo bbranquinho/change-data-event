@@ -1,6 +1,6 @@
-package io.github.change.data.event.idempotency;
+package io.bbranquinho.change.data.event.idempotency;
 
-import io.github.change.data.event.dynamo.DynamoEvent;
+import io.bbranquinho.change.data.event.dynamo.DynamoEvent;
 import software.amazon.awssdk.enhanced.dynamodb.DynamoDbTable;
 
 public interface IdempotencyStrategy {

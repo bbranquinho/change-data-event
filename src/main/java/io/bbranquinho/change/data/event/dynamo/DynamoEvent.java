@@ -1,9 +1,9 @@
-package io.github.change.data.event.dynamo;
+package io.bbranquinho.change.data.event.dynamo;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import io.github.change.data.event.Aggregate;
-import io.github.change.data.event.Event;
+import io.bbranquinho.change.data.event.Aggregate;
+import io.bbranquinho.change.data.event.Event;
 import org.jboss.logging.Logger;
 import software.amazon.awssdk.enhanced.dynamodb.mapper.annotations.DynamoDbBean;
 import software.amazon.awssdk.enhanced.dynamodb.mapper.annotations.DynamoDbPartitionKey;
